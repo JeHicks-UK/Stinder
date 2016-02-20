@@ -1,6 +1,25 @@
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model('User', {
-  steamid: String,
-  personaname: String
+var GameSchema = new mongoose.Schema({
+  appid:            String,
+  name:             String,
+  img_icon_url:     String,
+  img_logo_url:     String,
+  playtime_2weeks:  String,
+  playtime_forever: String,
+  advertise:        Boolean //not from steam
 });
+
+var UserSchema = new mongoose.Schema({
+  steamid:      String, //from steam
+  personaname:  String, //from steam
+  avatarfull:   String, //from steam
+  displayName:  String,
+  dob:          Date,
+  languages:    [String],
+  aboutMe:      String,
+  ownedGames:   [GameSchema]
+});
+
+
+module.exports = mongoose.model('User', UserSchema);
