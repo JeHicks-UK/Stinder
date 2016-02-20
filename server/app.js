@@ -26,7 +26,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SteamStrategy({
     returnURL: 'http://localhost:9001/auth/steam/return',
     realm: 'http://localhost:9001/',
-    apiKey: ''
+    apiKey: process.env.STEAM_API_KEY
   },
   function(identifier, profile, done) {
     // asynchronous verification, for effect...
@@ -44,7 +44,7 @@ passport.use(new SteamStrategy({
 var app = express();
 
 app.use(session({
-    secret: '',
+    secret: process.env.EXPRESS_SECRET,
     name: 'stinderSessionId',
     resave: true,
     saveUninitialized: true}));
@@ -53,11 +53,7 @@ app.use(session({
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(__dirname + '/../web/'));
-
-app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
+app.use(express.static(__dirname + '/../web/dist'));
 
 // GET /auth/steam
 //   Use passport.authenticate() as route middleware to authenticate the
