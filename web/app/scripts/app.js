@@ -17,7 +17,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'angularjs-dropdown-multiselect',
-    'ui.grid'
+    'ui.grid',
+    'ui.grid.selection'
   ])
   .config(function ($routeProvider) {
     $routeProvider
