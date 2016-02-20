@@ -46,6 +46,11 @@ body {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
+
+.jumbotron-welcome {
+  margin-top: 100px;
+}
+
 .jumbotron .btn {
   font-size: 21px;
   padding: 14px 24px;
@@ -81,3 +86,4 @@ body {
     border-bottom: 0;
   }
 }
+
