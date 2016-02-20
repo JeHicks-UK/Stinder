@@ -2,21 +2,24 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , session = require('express-session')
-  , SteamStrategy = require('passport-steam').Strategy;
+  , SteamStrategy = require('passport-steam').Strategy
+  , dbConfig = require('./db.js')
+  , mongoose = require('mongoose')
+  , User = require('./models/user.js');
+
+
+// Mongoose setup
+mongoose.connect(dbConfig.url);
 
 // Passport session setup.
-//   To support persistent login sessions, Passport needs to be able to
-//   serialize users into and deserialize users out of the session.  Typically,
-//   this will be as simple as storing the user ID when serializing, and finding
-//   the user by ID when deserializing.  However, since this example does not
-//   have a database of user records, the complete Steam profile is serialized
-//   and deserialized.
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user._id);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(user, done) {
+  User.findById(id, function(err, user) {
+	done(null, user);
+  });
 });
 
 // Use the SteamStrategy within Passport.
@@ -29,17 +32,32 @@ passport.use(new SteamStrategy({
     apiKey: process.env.STEAM_API_KEY
   },
   function(identifier, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      // To keep the example simple, the user's Steam profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Steam account with a user record in your database,
-      // and return that user instead.
-      profile.identifier = identifier;
-      return done(null, profile);
-    });
+    process.nextTick(function() {
+		profile = profile._json;
+		console.log(profile);
+    User.findOneAndUpdate({'steamid': profile.steamid },
+	  {
+	    steamid: profile.steamid,
+		personaname: profile.personaname
+	  },
+	  {
+		upsert: true
+	  },
+	  function(err, user) {
+	    if(err) {
+			return done(err);
+		}
+		
+		if(user) {
+			console.log("For the glory of satan");
+			console.log(JSON.stringify(user));
+		} 
+		return(null, profile);
+      });
+  });
   }
 ));
+
 
 var app = express();
 

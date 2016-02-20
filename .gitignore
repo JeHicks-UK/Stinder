@@ -34,3 +34,6 @@ node_modules
 
 # Environments file
 .env
+
+# Local Data store
+data
