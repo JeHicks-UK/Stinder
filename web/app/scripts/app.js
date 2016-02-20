@@ -34,6 +34,16 @@ angular
         controller: 'RegisterCtrl',
         controllerAs: 'register'
       })
+      .when('/register2', {
+        templateUrl: 'views/register2.html',
+        controller: 'Register2Ctrl',
+        controllerAs: 'register2'
+      })
+      .when('/register3', {
+        templateUrl: 'views/register3.html',
+        controller: 'Register3Ctrl',
+        controllerAs: 'register3'
+      })
       .otherwise({
         redirectTo: '/'
       });
