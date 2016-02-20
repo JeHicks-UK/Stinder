@@ -9,9 +9,7 @@
  */
 angular.module('hackAppApp')
   .controller('LandingCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+
+
+
   });
