@@ -15,7 +15,19 @@ angular.module('hackAppApp')
       });
     };
 
+    this.getUserGameData = function(callback) {
+      $http.get("/user/games").then(function(data) {
+        callback(data);
+      }, function(error) {
+        callback(error);
+      });
+    };
 
-
-
+    this.saveUserData = function(data, callback) {
+      $http.post("/user", data).then(function(response) {
+        callback(response);
+      }, function(error) {
+        callback(error);
+      });
+    };
   });
