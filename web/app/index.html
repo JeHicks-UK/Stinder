@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html ng-app="hackAppApp">
   <head>
     <meta charset="utf-8">
     <title></title>
@@ -9,6 +9,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
     <!-- endbower -->
     <link rel="stylesheet" href="styles/bootstrap-skin.css" />
     <!-- endbuild -->
@@ -16,7 +17,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="hackAppApp">
+  <body>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -57,7 +58,11 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <!-- endbower -->
+    <script src="bower_components/angular-ui-grid/src/"></script>
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -65,6 +70,7 @@
         <script src="scripts/controllers/landing.js"></script>
         <script src="scripts/controllers/home.js"></script>
         <script src="scripts/controllers/register.js"></script>
+        <script src="scripts/controllers/register2.js"></script>
         <script src="scripts/services/server.js"></script>
         <!-- endbuild -->
 </body>

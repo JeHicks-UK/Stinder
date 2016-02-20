@@ -15,7 +15,9 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'angularjs-dropdown-multiselect',
+    'ui.grid'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -67,7 +69,7 @@ angular
       $rootScope.$on('$locationChangeStart', function () {
         // redirect to login page if not logged in
         if ($location.path() !== '/' && !$rootScope.globals.currentUser.sessionToken) {
-          $location.path('/');
+          //$location.path('/');
         }
       });
     }]);

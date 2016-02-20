@@ -1,1 +1,61 @@
-<p>This is the register view.</p>
+
+<div class="row">
+
+  <div class="col-md-12">
+    <h1>Stinder</h1>
+    <div class="well bs-component">
+      <form class="form-horizontal">
+        <fieldset class="registration-fieldset">
+          <legend>Registration - <span class="italics-text">General Information</span></legend>
+          <div class="registration-stage">
+            <span class="label label-danger">1</span>  <span class="label label-default">2</span>
+          </div>
+          <div class="form-group">
+            <label for="steamId" class="col-lg-2 control-label">Steam ID</label>
+            <div class="col-lg-10">
+              <span id="steamId" class="reg-form-steam-id">Your_Steam_ID</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputDisplayName" class="col-lg-2 control-label">Display Name</label>
+            <div class="col-lg-10">
+              <input type="password" class="form-control" id="inputDisplayName" placeholder="Name others see">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputBirth" class="col-lg-2 control-label">Date of Birth</label>
+            <div class="col-lg-10">
+              <input type="date" class="form-control" id="inputBirth" placeholder="Date of Birth">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputLanguages" class="col-lg-2 control-label">Languages</label>
+            <div class="col-lg-10">
+              <div id="inputLanguages"
+                   ng-dropdown-multiselect=""
+                   options="register.languages"
+                   selected-model="register.selectedLanguages"
+                   extra-settings="register.languageDropdownSettings"></div>
+              <span class="help-block">What languages matches should speak?</span>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <label for="inputAboutMe" class="col-lg-2 control-label">About Me</label>
+            <div class="col-lg-10">
+              <textarea class="form-control" rows="3" id="inputAboutMe"></textarea>
+              <span class="help-block">Talk what you like and why should somebody want to play a game with you.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+              <button type="submit" class="btn btn-primary">Next</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+  </div>
+
+
+</div>

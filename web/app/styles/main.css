@@ -64,6 +64,10 @@ body {
   margin-top: 28px;
 }
 
+.italics-text {
+  font-style: italic;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
@@ -87,3 +91,54 @@ body {
   }
 }
 
+/* Registration form */
+
+.registration-fieldset {
+  position: relative;
+}
+
+.registration-stage {
+  float: right;
+  position: absolute;
+  right: -7px;
+  top: 7px;
+}
+
+.reg-form-steam-id {
+  line-height: 31px;
+  font-style: italic;
+}
+
+.dropdown-menu.dropdown-menu-form {
+  overflow-y: scroll!important;
+  overflow-x: hidden!important;
+  background-color: #2B3E50;
+}
+
+.float-right {
+  float: right;
+}
+
+.game-selection-grid {
+  width: 500px;
+  height: 250px;
+}
+
+.ui-grid {
+  margin-bottom: 35px;
+}
+
+.ui-grid-cell-contents.ui-grid-header-cell-primary-focus {
+  background-color: #2B3E50;
+}
+
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: #2B3E50;
+}
+.ui-grid-row:nth-child(odd) .ui-grid-cell {
+  background-color: #1b3e50;
+}
+
+.ui-grid-viewport {
+  overflow-x: hidden!important;
+}
