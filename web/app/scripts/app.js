@@ -20,16 +20,44 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
+        templateUrl: 'views/landing.html',
+        controller: 'LandingCtrl',
+        controllerAs: 'landing'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
+      .when('/home', {
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl',
+        controllerAs: 'home'
+      })
+      .when('/register', {
+        templateUrl: 'views/register.html',
+        controller: 'RegisterCtrl',
+        controllerAs: 'register'
       })
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+  .run(['$rootScope', '$location', '$cookies', '$http',
+    function ($rootScope, $location, $cookieStore, $http) {
+      // keep user logged in after page refresh
+      $rootScope.globals = {
+        currentUser: {
+          sessionToken: $cookieStore.get('sessionToken') || ''
+        }
+      };
+
+      if ($rootScope.globals.currentUser.sessionToken) {
+        $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.sessionToken; // jshint ignore:line
+        if($location.path() === '/') {
+          $location.path('/home');
+        }
+      }
+
+      $rootScope.$on('$locationChangeStart', function () {
+        // redirect to login page if not logged in
+        if ($location.path() !== '/' && !$rootScope.globals.currentUser.sessionToken) {
+          $location.path('/');
+        }
+      });
+    }]);

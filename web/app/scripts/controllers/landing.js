@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name hackAppApp.controller:MainCtrl
+ * @name hackAppApp.controller:LandingCtrl
  * @description
- * # MainCtrl
+ * # LandingCtrl
  * Controller of the hackAppApp
  */
 angular.module('hackAppApp')
-  .controller('MainCtrl', function () {
+  .controller('LandingCtrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
