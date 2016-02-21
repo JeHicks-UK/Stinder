@@ -10,7 +10,7 @@
           <div class="registration-stage">
             <span class="label label-default">1</span> <span class="label label-danger">2</span>
           </div>
-          <div ui-grid="register2.gameGridOptions" class=""></div>
+          <div ui-grid="register2.gameGridOptions" ui-grid-selection class="game-selection-grid"></div>
 
           <div class="form-group">
             <div class="col-lg-10">
@@ -21,6 +21,6 @@
         </fieldset>
       </form>
     </div>
-
+      {{register2.gridApi.selectedCount}}
 
   </div>

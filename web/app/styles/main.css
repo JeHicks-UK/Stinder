@@ -120,15 +120,20 @@ body {
 }
 
 .game-selection-grid {
-  width: 500px;
-  height: 250px;
+  height: 550px;
 }
 
 .ui-grid {
   margin-bottom: 35px;
 }
 
-.ui-grid-cell-contents.ui-grid-header-cell-primary-focus {
+.ui-grid-cell {
+  cursor: pointer;
+}
+
+
+.ui-grid-cell-contents.ui-grid-header-cell-primary-focus,
+.ui-grid-header-cell {
   background-color: #2B3E50;
 }
 
@@ -141,4 +146,8 @@ body {
 
 .ui-grid-viewport {
   overflow-x: hidden!important;
+}
+
+.ui-grid-row.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+  background-color: #DF691A;
 }
