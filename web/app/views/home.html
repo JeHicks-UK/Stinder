@@ -14,7 +14,7 @@
       </div>
       <div class="clearfix"></div>
       <div class="home-grid-message">{{::home.userData.displayName}} is interested in these games</div>
-      <div ui-grid="home.gameGridOptions" class="home-game-grid"></div>
+      <div ui-grid="home.gameGridOptions" my-ui-grid-resize class="home-game-grid"></div>
       <hr>
       <button class="btn btn-lg btn-danger"><i class="fa fa-times"></i> Nope</button>
       <button class="btn btn-lg btn-success btn-try-match" ng-click="home.accept(home.userData)"><i class="fa fa-gamepad"></i> Yep</button>
