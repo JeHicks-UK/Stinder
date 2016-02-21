@@ -8,7 +8,7 @@ module.exports = function (app) {
       var userMap = {};
       users.forEach(function(user){
         userMap[user.steamid] = user;
-      })
+      });
       res.json(userMap);
     });
   });
