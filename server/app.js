@@ -7,7 +7,8 @@ var express = require('express')
   , SteamStrategy = require('passport-steam').Strategy
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(session)
-  , User = require('./models/user.js');
+  , User = require('./models/user.js')
+  , _ = require('underscore');
 
 var steamAPIKey = process.env.STEAM_API_KEY;
 var hostname = process.env.STINDER_HOST || 'localhost';
@@ -56,6 +57,18 @@ var getUserGames = function (steamid, callback) {
   })
 };
 
+var mergeGamesArrays = function(existingGames, gamesFromSteam){
+  var mergedGames = existingGames;
+  var existingGameIDs = _.pluck(existingGames, 'appid');
+  console.log(existingGameIDs);
+  gamesFromSteam.forEach(function(game){
+    if (!_.contains(existingGameIDs, game.appid.toString())){
+      mergedGames.push(game);
+    }
+  });
+  return mergedGames;
+}
+
 passport.use(new SteamStrategy({
     returnURL: 'http://' + hostname + ':' + port + '/auth/steam/return',
     realm: 'http://' + hostname + ':' + port + '/',
@@ -67,26 +80,36 @@ passport.use(new SteamStrategy({
       console.log("in next tick");
       profile = profile._json;
       console.log(profile);
-      getUserGames(profile.steamid, function (ownedGames) {
-        User.findOneAndUpdate({'steamid': profile.steamid},
-          {
-            steamid: profile.steamid,
-            personaname: profile.personaname,
-            avatarfull: profile.avatarfull,
-            ownedGames: ownedGames
-          },
-          {
-            upsert: true
-          },
+      getUserGames(profile.steamid, function (newGamesList) {
+        User.findOne({'steamid': profile.steamid},
           function (err, user) {
             if (err) {
               return done(err, false);
             }
-
             if (user) {
-              console.log("User Found");
-              return done(null, user);
+              console.log("Found user %s, updating.", user.personaname);
+              user.steamid = profile.steamid;
+              user.personaname = profile.personaname;
+              user.avatarfull = profile.avatarfull;
+              user.ownedGames = mergeGamesArrays(user.ownedGames, newGamesList);
             }
+            else {
+              console.log("User not found, creating new user for %s", profile.personaname);
+              user = new User({
+                steamid : profile.steamid,
+                personaname : profile.personaname,
+                avatarfull : profile.avatarfull,
+                ownedGames : newGamesList
+              });
+            }
+            user.save(function(err, user){
+              if(err){
+                return done(err, false);
+              }
+              if(user){
+                return done(null, user);
+              }
+            })
           }
         );
       });
@@ -100,8 +123,7 @@ var sessionConfig = {
   resave: true,
   saveUninitialized: true,
   cookie: {
-    expires: new Date(Date.now() + 60 * 10000),
-    maxAge: 60 * 20000,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: false
   },
   store: new MongoStore({mongooseConnection: mongoose.connection})
