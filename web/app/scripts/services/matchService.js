@@ -94,11 +94,13 @@ angular.module('hackAppApp')
       }) */
 
 
-    }
+    };
 
 
     this.acceptMatch = function(_id, callback) {
-
+      server.acceptMatch(_id, function(response) {
+        callback(response);
+      })
     };
 
   });
