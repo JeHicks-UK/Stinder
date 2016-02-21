@@ -61,10 +61,9 @@ angular
             $location.path('/');
           }
         }
-        else if (response.data){
-          var user = response.data;
+        else {
           if ($location.path() === '/'){
-            if(user.registrationComplete){
+            if(response.registrationComplete){
               $location.path('/home');
             }
             else {
