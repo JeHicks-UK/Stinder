@@ -5,7 +5,7 @@
 
 
 angular.module('hackAppApp')
-  .service("registrationService", function(server) {
+  .service("userService", function(server) {
     var userData;
 
     this.getUserData = function(callback) {
@@ -14,8 +14,8 @@ angular.module('hackAppApp')
       }
       else {
         server.getUserData(function (data) {
-          userData = data;
-          callback(userData);
+            userData = data;
+            callback(userData);
         });
       }
     };

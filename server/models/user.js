@@ -18,7 +18,8 @@ var UserSchema = new mongoose.Schema({
   dob:          Date,
   languages:    [String],
   aboutMe:      String,
-  ownedGames:   [GameSchema]
+  ownedGames:   [GameSchema],
+  registrationComplete: Boolean
 });
 
 

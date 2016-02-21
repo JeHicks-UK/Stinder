@@ -8,8 +8,10 @@
  * Controller of the hackAppApp
  */
 angular.module('hackAppApp')
-  .controller('LandingCtrl', function () {
-
+  .controller('LandingCtrl', function (userService) {
+    userService.getUserData(function(data){
+      //alert(JSON.stringify(data));
+    })
 
 
   });

@@ -50,26 +50,46 @@ angular
         redirectTo: '/'
       });
   })
-  .run(['$rootScope', '$location', '$cookies', '$http',
-    function ($rootScope, $location, $cookieStore, $http) {
-      // keep user logged in after page refresh
-      $rootScope.globals = {
-        currentUser: {
-          sessionToken: $cookieStore.get('sessionToken') || ''
+  .run(['$rootScope', '$location', '$cookies', '$http', 'userService',
+    function ($rootScope, $location, $cookieStore, $http, userService) {
+      //check if user is logged in
+      userService.getUserData(function(response){
+        if (response.status === 401){
+          if ($location.path() !== '/'){
+            $location.path('/');
+          }
         }
-      };
-
-      if ($rootScope.globals.currentUser.sessionToken) {
-        $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.sessionToken; // jshint ignore:line
-        if($location.path() === '/') {
-          $location.path('/home');
-        }
-      }
-
-      $rootScope.$on('$locationChangeStart', function () {
-        // redirect to login page if not logged in
-        if ($location.path() !== '/' && !$rootScope.globals.currentUser.sessionToken) {
-          //$location.path('/');
+        else if (response.data){
+          var user = response.data;
+          if ($location.path() === '/'){
+            if(user.registrationComplete){
+              $location.path('/home');
+            }
+            else {
+              $location.path('/register');
+            }
+          }
         }
       });
+
+      // keep user logged in after page refresh
+      //$rootScope.globals = {
+      //  currentUser: {
+      //    sessionToken: $cookieStore.get('sessionToken') || ''
+      //  }
+      //};
+      //
+      //if ($rootScope.globals.currentUser.sessionToken) {
+      //  $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.sessionToken; // jshint ignore:line
+      //  if($location.path() === '/') {
+      //    $location.path('/home');
+      //  }
+      //}
+      //
+      //$rootScope.$on('$locationChangeStart', function () {
+      //  // redirect to login page if not logged in
+      //  if ($location.path() !== '/' && !$rootScope.globals.currentUser.sessionToken) {
+      //    //$location.path('/');
+      //  }
+      //});
     }]);

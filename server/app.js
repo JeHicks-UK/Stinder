@@ -33,7 +33,9 @@ passport.use(new SteamStrategy({
     apiKey: process.env.STEAM_API_KEY
   },
   function (identifier, profile, done) {
+    console.log("in steam strategy");
     process.nextTick(function () {
+      console.log("in next tick");
       profile = profile._json;
       console.log(profile);
       User.findOneAndUpdate({'steamid': profile.steamid},
@@ -102,7 +104,12 @@ app.get('/auth/steam',
 app.get('/auth/steam/return',
   passport.authenticate('steam', {failureRedirect: '/'}),
   function (req, res) {
-    res.redirect('/omq');
+    if (req.user.registrationComplete){
+      res.redirect('/#/home');
+    }
+    else{
+      res.redirect('/#/register');
+    }
   });
 
 app.get('/omq',
@@ -110,6 +117,31 @@ app.get('/omq',
     //console.log(res.cookie());
     //res.json(req.session);
   });
+
+app.get('/user', ensureAuthenticated, function(req, res){
+  if(req.user){
+    console.log("/user: returning user");
+    res.json(req.user);
+  }
+  else{
+    console.log("/user: returning null");
+    res.json({data: null});
+  }
+})
+
+app.get('/test',
+        //passport.authenticate('steam', {failureRedirect: '/'}),
+        function (req, res) {
+  if (!req.isAuthenticated()){
+    res.json({message:"not authed"});
+  }
+  else if (req.user){
+    res.json(req.user);
+  }
+  else{
+    res.json({message: "no user"});
+  }
+});
 
 app.listen(9001);
 
@@ -119,8 +151,13 @@ app.listen(9001);
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
 function ensureAuthenticated(req, res, next) {
+  console.log("checking authentication for " + req.path)
   if (req.isAuthenticated()) {
+    console.log("user is authenticated");
     return next();
   }
-  res.redirect('/');
+  else{
+    console.log("sending error message");
+    res.send(401, "Authentication Failed");
+  }
 }
