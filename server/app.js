@@ -156,5 +156,12 @@ app.get('/auth/steam/return',
     }
   });
 
+app.get('/logout',
+  function(req, res) {
+    req.session.destroy();
+    res.redirect('/');
+  }
+);
+
 
 app.listen(port);
