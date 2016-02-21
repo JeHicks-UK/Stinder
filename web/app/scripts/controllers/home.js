@@ -15,7 +15,6 @@ angular.module('hackAppApp')
       scope.userData.ownedGames.forEach(function(game) {
         game.imageUrl = "http://media.steampowered.com/steamcommunity/public/images/apps/"+game.appid+"/"+game.img_logo_url+".jpg";
       });
-      console.log(data);
 
 
       scope.gameGridOptions = {

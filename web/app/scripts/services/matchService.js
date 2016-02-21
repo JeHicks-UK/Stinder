@@ -5,10 +5,39 @@
 
 
 angular.module('hackAppApp')
-  .service("matchService", function() {
+  .service("matchService", function(server) {
+
+
+    var matchData;
+
+    this.getYourMatches = function(callback) {
+      if (matchData){
+        callback(matchData);
+      }
+      else {
+        server.getMatches(function (data) {
+          if(data.status===200) {
+            matchData = data.data;
+          }
+          else {
+            console.log(data);
+            callback([]);
+          }
+          callback(matchData);
+        });
+      }
+    };
+
+
 
     this.getPotentialMatch = function(callback) {
 
+      server.getNextPotentialMatch(function(data) {
+
+      });
+
+
+      /*
       callback({
         ownedGames: [
           {
@@ -56,7 +85,9 @@ angular.module('hackAppApp')
             "advertise": true
           }
         ]
-      })
+      }) */
+
+
     }
 
   });

@@ -30,4 +30,21 @@ angular.module('hackAppApp')
         callback(error);
       });
     };
+
+    this.getMatches = function(callback) {
+      $http.get("/matches").then(function(data) {
+        callback(data);
+      }, function(error) {
+        callback(error);
+      });
+    };
+
+    this.getNextPotentialMatch = function(callback) {
+      $http.get("/potential/next").then(function(data) {
+        callback(data);
+      }, function(error) {
+        callback(error);
+      });
+    };
+
   });

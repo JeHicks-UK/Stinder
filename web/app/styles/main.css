@@ -236,3 +236,34 @@ body {
 .btn-try-match {
   float: right;
 }
+
+.matches-main-container {
+  position: fixed;
+  left: 0px;
+  top: 40px;
+}
+
+.matches-fixed-container {
+  width: 350px;
+  height: 100%;
+  padding: 19px;
+  position: relative;
+  float: left;
+}
+
+.matches-fluid-container {
+  position: relative;
+  float: left;
+  padding: 19px;
+}
+
+.match-avatar {
+  float: left;
+  height: 70px;
+}
+
+.match-name {
+  margin-left: 19px;
+  position: relative;
+  top: 22px;
+}
