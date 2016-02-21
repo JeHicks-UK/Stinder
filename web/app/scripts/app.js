@@ -42,10 +42,10 @@ angular
         controller: 'Register2Ctrl',
         controllerAs: 'register2'
       })
-      .when('/register3', {
-        templateUrl: 'views/register3.html',
-        controller: 'Register3Ctrl',
-        controllerAs: 'register3'
+      .when('/matches', {
+        templateUrl: 'views/matches.html',
+        controller: 'MatchesCtrl',
+        controllerAs: 'matches'
       })
       .otherwise({
         redirectTo: '/'
