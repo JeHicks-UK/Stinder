@@ -42,23 +42,17 @@ module.exports = function (app) {
   app.post('/potential/accept', ensureAuthenticated, function (req, res) {
     var steamUserToAdd = req.body._id;
     var currentUser = req.user;
-    console.log('Adding ' + steamUserToAdd + ' to ' + currentUser.personaname + "(%s)", currentUser._id);
     // Find full user object of person to be accepted
     User.findOne({_id: steamUserToAdd}, function (err, steamUser) {
+      console.log('Adding %s (%s) to %s (%s)', steamUser.personaname, steamUser._id, currentUser.personaname, currentUser._id);
       // if the current user is already in the others 'accepted' list it's a match
       var steamUserAcceptedIDs = _.map(steamUser.accepted, function(acceptedUser){
         return acceptedUser._user.toString();
       });
-      console.log("steam user accepted: %s", JSON.stringify(steamUserAcceptedIDs));
-      console.log("current user id: %s, type is %s", currentUser._id.toString(), typeof currentUser._id.toString());
-      console.log("steam accepted0: %s, type is %s", steamUserAcceptedIDs[0], typeof steamUserAcceptedIDs[0]);
       var currentUserIndex = steamUserAcceptedIDs.indexOf(currentUser._id.toString());
-      console.log("current user index: %s", currentUserIndex);
-      console.log(_.contains(steamUserAcceptedIDs, currentUser._id.toString()));
-      if (_.contains(steamUserAcceptedIDs, currentUser._id.toString())) {
+      if (currentUserIndex >= 0) {
         console.log("!!MATCH!!");
-        //steamUser.accepted.splice(currentUserIndex, 1);
-        steamUser.accepted = _.without(steamUser.accepted, currentUser._id.toString());
+        steamUser.accepted.splice(currentUserIndex, 1);
         steamUser.matches.push({_user: currentUser._id});
         console.log("steamUser.matches: %s steamUser.accepted: %s", JSON.stringify(steamUser.matches), JSON.stringify(steamUser.accepted));
         steamUser.save();
