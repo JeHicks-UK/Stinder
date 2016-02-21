@@ -24,7 +24,7 @@ angular.module('hackAppApp')
     };
 
     this.saveUserData = function(data, callback) {
-      $http.post("/user", data).then(function(response) {
+      $http.post("/user", {user: data}).then(function(response) {
         callback(response);
       }, function(error) {
         callback(error);
