@@ -30,6 +30,5 @@ var UserSchema = new mongoose.Schema({
     {_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}
   ]
 });
-//http://stackoverflow.com/questions/16028942/is-it-possible-to-populate-a-self-reference-in-a-mongoosejs-schema
 
 module.exports = mongoose.model('User', UserSchema);

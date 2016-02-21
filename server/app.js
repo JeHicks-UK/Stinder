@@ -36,8 +36,7 @@ var getUserGames = function (steamid, callback) {
     '&steamid=' + steamid +
     '&format=json' +
     '&include_appinfo=1'
-  }
-  console.log(requestOptions);
+  };
   http.get(requestOptions, function (res) {
     var body = '';
     res.on('data', function (chunk) {
@@ -79,7 +78,6 @@ passport.use(new SteamStrategy({
     process.nextTick(function () {
       console.log("in next tick");
       profile = profile._json;
-      console.log(profile);
       getUserGames(profile.steamid, function (newGamesList) {
         User.findOne({'steamid': profile.steamid},
           function (err, user) {
@@ -138,6 +136,7 @@ app.use(passport.session());
 app.use(bodyParser.json({ limit : "50mb" }));
 require('./routes/user.js')(app);
 require('./routes/matches.js')(app);
+require('./routes/potentials.js')(app);
 require('./helpers/debug.js')(app);
 
 app.get('/auth/steam',
