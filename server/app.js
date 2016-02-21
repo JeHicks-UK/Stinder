@@ -1,4 +1,5 @@
 var express = require('express')
+  , http = require('http')
   , bodyParser = require('body-parser')
   , passport = require('passport')
   , util = require('util')
@@ -10,7 +11,7 @@ var express = require('express')
   , User = require('./models/user.js');
 
 var steamAPIKey = process.env.STEAM_API_KEY;
-var hicksSteamID = '76561197961296772';
+//var hicksSteamID = '76561197961296772';
 
 // Mongoose setup
 mongoose.connect(dbConfig.url);
@@ -32,12 +33,27 @@ var getUserGames = function(steamid, callback){
     port: 80,
     path: '/IPlayerService/GetOwnedGames/v0001/?key='+ steamAPIKey +
           '&steamid='+ steamid +
-          '&format=json'
+          '&format=json' +
+          '&include_appinfo=1'
   }
-   http.get(requestOptions, callback)
-     .on('error', function(e){
-       console.error("Error getting user's games");
-     })
+  console.log(requestOptions);
+  http.get(requestOptions, function(res){
+     var body = '';
+     res.on('data', function(chunk){
+       body += chunk;
+     });
+
+     res.on('end', function(){
+       var ownedGames = JSON.parse(body).response.games;
+       ownedGames = ownedGames.map(function(game){
+         delete game.has_community_visible_stats;
+         return game;
+       });
+       callback(ownedGames);
+     });
+  }).on('error', function(e){
+     console.error("Error getting user's games");
+  })
 }
 
 // Use the SteamStrategy within Passport.
@@ -55,26 +71,29 @@ passport.use(new SteamStrategy({
       console.log("in next tick");
       profile = profile._json;
       console.log(profile);
-      User.findOneAndUpdate({'steamid': profile.steamid},
-        {
-          steamid: profile.steamid,
-          personaname: profile.personaname,
-          avatarfull: profile.avatarfull
-        },
-        {
-          upsert: true
-        },
-        function (err, user) {
-          if (err) {
-            return done(err, false);
-          }
+      getUserGames(profile.steamid, function(ownedGames){
+        User.findOneAndUpdate({'steamid': profile.steamid},
+          {
+            steamid: profile.steamid,
+            personaname: profile.personaname,
+            avatarfull: profile.avatarfull,
+            ownedGames: ownedGames
+          },
+          {
+            upsert: true
+          },
+          function (err, user) {
+            if (err) {
+              return done(err, false);
+            }
 
-          if (user) {
-            console.log("User Found");
-            return done(null, user);
+            if (user) {
+              console.log("User Found");
+              return done(null, user);
+            }
           }
-        }
-      );
+        );
+      });
     });
   }
 ));
@@ -166,8 +185,6 @@ app.post('/user', ensureAuthenticated, function(req, res) {
       })
   }
 });
-
-app.get('/gamesTest', function(req, res){});
 
 app.listen(9001);
 
