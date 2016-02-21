@@ -20,15 +20,15 @@ var UserSchema = new mongoose.Schema({
   aboutMe:      String,
   ownedGames:   [GameSchema],
   registrationComplete: Boolean,
-  matches: [{
-    _id: {type: String, ref: 'User'}
-  }],
-  accepted: [{
-    _id: {type: String, ref: 'User'}
-  }],
-  rejected: [{
-    _id: {type: String, ref: 'User'}
-  }]
+  matches: [
+    {_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}
+  ],
+  accepted: [
+    {_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}
+  ],
+  rejected: [
+    {_user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}}
+  ]
 });
 //http://stackoverflow.com/questions/16028942/is-it-possible-to-populate-a-self-reference-in-a-mongoosejs-schema
 

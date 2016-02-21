@@ -19,19 +19,22 @@ module.exports = function (app) {
     console.log("addMatchTo: %s addMatchUserSteamID: %s", addMatchTo, addMatchUserSteamID);
     User.findOne(
       {steamid : addMatchUserSteamID},
-      function(addMatchUser){
-        console.log(addMatchUser);
+      function(err, addMatchUser){
+        console.log("addMatchUser: %s, _id:%s", addMatchUser.personaname, addMatchUser._id);
         User.findOneAndUpdate(
           {'steamid': addMatchTo},
-          {$push: {matches: addMatchUser._id}},
+          {$push: {'matches': {_user: addMatchUser._id}}},
           {},
           function (err, user) {
-            console.log(addMatchUser)
             if (err) {
               res.send(err);
             }
             if (user) {
-              res.send(user);
+              User.findOne({steamid: addMatchTo})
+                .populate('matches._user')
+                .exec(function(err, u){
+                  res.json(u);
+              })
             }
           }
         );
