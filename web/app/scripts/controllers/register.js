@@ -8,6 +8,7 @@ angular.module('hackAppApp')
     userService.getUserData(function(data) {
       console.log(data);
       scope.userData = data;
+      scope.userData.dob = new Date(data.dob);
     });
 
 
