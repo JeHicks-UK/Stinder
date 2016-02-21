@@ -11,6 +11,8 @@ var express = require('express')
   , User = require('./models/user.js');
 
 var steamAPIKey = process.env.STEAM_API_KEY;
+var hostname = process.env.STINDER_HOST || 'localhost';
+var port = process.env.STINDER_PORT || 9001;
 //var hicksSteamID = '76561197961296772';
 
 // Mongoose setup
@@ -61,8 +63,8 @@ var getUserGames = function(steamid, callback){
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
 passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:9001/auth/steam/return',
-    realm: 'http://localhost:9001/',
+    returnURL: 'http://'+hostname+':'+port+'/auth/steam/return',
+    realm: 'http://'+hostname+':'+port+'/',
     apiKey: steamAPIKey
   },
   function (identifier, profile, done) {
