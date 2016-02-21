@@ -6,7 +6,25 @@ angular.module('hackAppApp')
 
     var scope = this;
 
+    scope.gameGridOptions = {
+      enableColumnMenus: false,
+      rowHeight: 69,
+      enableSorting: true,
+      showSelectionCheckbox: false,
+      enableFullRowSelection: false,
+      enableRowSelection: false,
+      multiSelect: false,
+      enableHorizontalScrollbar: false
+    };
+
+    scope.gameGridOptions.onRegisterApi = function(gridApi){
+      scope.gridApi = gridApi;
+    };
+
+
+
     matchService.getPotentialMatch(function(data) {
+
       console.log(data);
       scope.userData = data;
       scope.userData.ownedGames = scope.userData.ownedGames.filter(function(game) {
@@ -19,15 +37,7 @@ angular.module('hackAppApp')
 
 
       scope.gameGridOptions = {
-        enableColumnMenus: false,
-        rowHeight: 69,
         minRowsToShow: scope.userData.ownedGames.length>4 ? 4 : scope.userData.ownedGames.length,
-        enableSorting: true,
-        showSelectionCheckbox: false,
-        enableFullRowSelection: false,
-        enableRowSelection: false,
-        multiSelect: false,
-        enableHorizontalScrollbar: false,
         enableVerticalScrollbar: scope.userData.ownedGames.length>4 ? uiGridConstants.scrollbars.ALWAYS : uiGridConstants.scrollbars.NEVER,
         columnDefs: [
           { field: 'image', cellTemplate: "<img src=\"{{row.entity.imageUrl}}\" lazy-src>", maxWidth: 184, enableSorting: false},
@@ -45,8 +55,7 @@ angular.module('hackAppApp')
         ],
         data: scope.userData.ownedGames
       };
-
-
+      scope.gridApi.core.refresh();
 
 
     });
