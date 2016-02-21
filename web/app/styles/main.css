@@ -161,3 +161,50 @@ body {
 .reg-avatar {
   height: 60px;
 }
+
+
+/* Home page design */
+
+.home-avatar-container {
+  float: left;
+}
+
+.home-avatar {
+  height: 130px;
+  min-width: 130px;
+}
+
+.home-display-name {
+  font-size: 24px;
+}
+
+.home-user-details {
+  float:left;
+  margin-left: 19px;
+}
+
+.home-about {
+  margin-top: 25px;
+}
+
+@media screen and (max-width: 420px) {
+  .home-user-details {
+    margin-left: 0px;
+  }
+}
+
+.home-grid-message {
+  margin-top: 19px;
+  margin-bottom: 5px;
+}
+
+.home-game-grid {
+}
+
+.playtime-cell-content {
+  margin-left: 5px;
+}
+
+.btn-try-match {
+  float: right;
+}
