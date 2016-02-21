@@ -168,6 +168,7 @@ app.post('/user', ensureAuthenticated, function(req, res) {
   }
   else{
     console.log(user);
+    user.registrationComplete = true;
     User.findOneAndUpdate(
       {steamid: authedUser.steamid} /*query:*/,
       user /*doc*/,
@@ -201,6 +202,6 @@ function ensureAuthenticated(req, res, next) {
   }
   else{
     console.log("sending error message");
-    res.send(401, "Authentication Failed");
+    res.status(401).send("Authentication Failed");
   }
 }
