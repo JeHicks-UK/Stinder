@@ -1,4 +1,5 @@
 var express = require('express')
+  , bodyParser = require('body-parser')
   , passport = require('passport')
   , util = require('util')
   , session = require('express-session')
@@ -8,6 +9,8 @@ var express = require('express')
   , MongoStore = require('connect-mongo')(session)
   , User = require('./models/user.js');
 
+var steamAPIKey = process.env.STEAM_API_KEY;
+var hicksSteamID = '76561197961296772';
 
 // Mongoose setup
 mongoose.connect(dbConfig.url);
@@ -23,6 +26,20 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+var getUserGames = function(steamid, callback){
+  var requestOptions = {
+    host: 'api.steampowered.com',
+    port: 80,
+    path: '/IPlayerService/GetOwnedGames/v0001/?key='+ steamAPIKey +
+          '&steamid='+ steamid +
+          '&format=json'
+  }
+   http.get(requestOptions, callback)
+     .on('error', function(e){
+       console.error("Error getting user's games");
+     })
+}
+
 // Use the SteamStrategy within Passport.
 //   Strategies in passport require a `validate` function, which accept
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
@@ -30,7 +47,7 @@ passport.deserializeUser(function (id, done) {
 passport.use(new SteamStrategy({
     returnURL: 'http://localhost:9001/auth/steam/return',
     realm: 'http://localhost:9001/',
-    apiKey: process.env.STEAM_API_KEY
+    apiKey: steamAPIKey
   },
   function (identifier, profile, done) {
     console.log("in steam strategy");
@@ -84,7 +101,7 @@ app.use(session({
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(bodyParser.json());
 
 // GET /auth/steam
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -148,6 +165,8 @@ app.post('/user', ensureAuthenticated, function(req, res) {
       })
   }
 });
+
+app.get('/gamesTest', function(req, res){});
 
 app.listen(9001);
 
