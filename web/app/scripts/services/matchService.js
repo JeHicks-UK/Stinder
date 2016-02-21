@@ -33,6 +33,12 @@ angular.module('hackAppApp')
     this.getPotentialMatch = function(callback) {
 
       server.getNextPotentialMatch(function(data) {
+        if(data.status===200) {
+          callback(data.data[0]);
+        }
+        else {
+          callback({});
+        }
 
       });
 
@@ -89,5 +95,10 @@ angular.module('hackAppApp')
 
 
     }
+
+
+    this.acceptMatch = function(_id, callback) {
+
+    };
 
   });

@@ -7,6 +7,7 @@ angular.module('hackAppApp')
     var scope = this;
 
     matchService.getPotentialMatch(function(data) {
+      console.log(data);
       scope.userData = data;
       scope.userData.ownedGames = scope.userData.ownedGames.filter(function(game) {
         return game.advertise;
@@ -50,6 +51,14 @@ angular.module('hackAppApp')
 
     });
 
+
+    this.accept = function(user) {
+      matchService.acceptMatch(user._id, function(response) {
+        console.log(response);
+      });
+
+
+    };
 
 
   });

@@ -47,4 +47,14 @@ angular.module('hackAppApp')
       });
     };
 
+    this.acceptMatch = function(id, callback) {
+      $http.post("potential/accept", {_id: id}).then(function(response) {
+        callback(response);
+      }, function(error) {
+        callback(error);
+      });
+    };
+
+
+
   });
