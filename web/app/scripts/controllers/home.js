@@ -23,10 +23,24 @@ angular.module('hackAppApp')
 
 
 
-    matchService.getPotentialMatch(function(data) {
+    var getPotentialMatch = function() {
+      console.log("Getting next guy");
+      matchService.getPotentialMatch(function(data) {
 
-      console.log(data);
-      scope.userData = data;
+        console.log(data);
+        scope.userData = data;
+
+        updateGameGrid();
+
+      });
+    };
+    getPotentialMatch();
+
+
+
+    var updateGameGrid = function() {
+
+
       scope.userData.ownedGames = scope.userData.ownedGames.filter(function(game) {
         return game.advertise;
       });
@@ -58,16 +72,34 @@ angular.module('hackAppApp')
       scope.gridApi.core.refresh();
 
 
-    });
+
+
+    };
 
 
     this.accept = function(user) {
       matchService.acceptMatch(user._id, function(response) {
-        console.log(response);
+        if(response.data.message==="match") {
+          alert("You have new match!!");
+        }
+        getPotentialMatch();
       });
 
-
     };
+
+
+    this.reject = function(user) {
+      matchService.rejectMatch(user._id, function(response) {
+        console.log(response);
+        if (response.data.status === 200) {
+          getPotentialMatch();
+        }
+        else {
+          console.log("failed to reject!");
+        }
+      });
+    };
+
 
 
   });

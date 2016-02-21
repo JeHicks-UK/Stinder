@@ -55,6 +55,13 @@ angular.module('hackAppApp')
       });
     };
 
+    this.rejectMatch = function(id, callback) {
+      $http.post("potential/reject", {_id: id}).then(function(response) {
+        callback(response);
+      }, function(error) {
+        callback(error);
+      });
+    };
 
 
   });

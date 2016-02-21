@@ -103,4 +103,11 @@ angular.module('hackAppApp')
       })
     };
 
+    this.rejectMatch = function(_id, callback) {
+      server.rejectMatch(_id, function(response) {
+        callback(response);
+      })
+    };
+
+
   });
