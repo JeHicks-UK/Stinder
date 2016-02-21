@@ -2,12 +2,30 @@
 
 
 angular.module('hackAppApp')
-  .controller('RegisterCtrl', function (server) {
+  .controller('RegisterCtrl', function (userService, $location) {
 
-
-    server.getUserData(function(data) {
+    var scope = this;
+    userService.getUserData(function(data) {
       console.log(data);
+      scope.userData = data;
     });
+
+
+    this.goToNextRegPage = function() {
+      scope.userData.languages = [];
+      scope.selectedLanguages.forEach(function(lan) {
+        scope.userData.languages.push(lan.label);
+      });
+      if(!scope.userData.displayName || scope.userData.displayName.length<4) {
+        scope.missingDisplayName = true;
+      }
+      else {
+        userService.setUserData(scope.userData);
+        $location.path("/register2");
+      }
+
+    };
+
 
     this.selectedLanguages = [{"code":"en","label":"English","nativeName":"English"}];
     this.languageDropdownSettings = {

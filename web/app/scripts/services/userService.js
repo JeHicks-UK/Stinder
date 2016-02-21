@@ -14,8 +14,13 @@ angular.module('hackAppApp')
       }
       else {
         server.getUserData(function (data) {
-            userData = data;
-            callback(userData);
+          if(data.status!==401) {
+            userData = data.data;
+          }
+          else {
+            userData = {status: data.status};
+          }
+          callback(userData);
         });
       }
     };

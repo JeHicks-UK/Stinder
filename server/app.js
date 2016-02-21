@@ -131,6 +131,7 @@ app.post('/user', ensureAuthenticated, function(req, res) {
     res.status(403).send("Cannot update for a user that isn't you");
   }
   else{
+    console.log(user);
     User.findOneAndUpdate(
       {steamid: authedUser.steamid} /*query:*/,
       user /*doc*/,

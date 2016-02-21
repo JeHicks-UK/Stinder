@@ -11,21 +11,22 @@
             <span class="label label-danger">1</span>  <span class="label label-default">2</span>
           </div>
           <div class="form-group">
-            <label for="steamId" class="col-lg-2 control-label">Steam ID</label>
+            <label for="steamId" class="col-lg-2 control-label">Steam Persona</label>
             <div class="col-lg-10">
-              <span id="steamId" class="reg-form-steam-id">Your_Steam_ID</span>
+              <span id="steamId" class="reg-form-steam-id">{{::register.userData.personaname}}</span>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" ng-class="register.missingDisplayName ? 'has-error': ''">
             <label for="inputDisplayName" class="col-lg-2 control-label">Display Name</label>
             <div class="col-lg-10">
-              <input type="password" class="form-control" id="inputDisplayName" placeholder="Name others see">
+              <input type="text" ng-model="register.userData.displayName" class="form-control" id="inputDisplayName" placeholder="Name others see on Stinder">
+              <span ng-if="register.missingDisplayName" class="help-block">Display Name is compulsory and has to be at least 4 characters long</span>
             </div>
           </div>
           <div class="form-group">
             <label for="inputBirth" class="col-lg-2 control-label">Date of Birth</label>
             <div class="col-lg-10">
-              <input type="date" class="form-control" id="inputBirth" placeholder="Date of Birth">
+              <input type="date" ng-model="register.userData.dob" class="form-control" id="inputBirth" placeholder="Date of Birth">
             </div>
           </div>
           <div class="form-group">
@@ -43,14 +44,14 @@
           <div class="form-group">
             <label for="inputAboutMe" class="col-lg-2 control-label">About Me</label>
             <div class="col-lg-10">
-              <textarea class="form-control" rows="3" id="inputAboutMe"></textarea>
+              <textarea class="form-control" ng-model="register.userData.aboutMe" rows="3" id="inputAboutMe"></textarea>
               <span class="help-block">Talk what you like and why should somebody want to play a game with you.</span>
             </div>
           </div>
 
           <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-              <button type="submit" class="btn btn-primary">Next</button>
+              <button type="submit" class="btn btn-primary" ng-click="register.goToNextRegPage()">Next</button>
             </div>
           </div>
         </fieldset>

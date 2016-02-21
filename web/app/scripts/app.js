@@ -57,6 +57,7 @@ angular
       userService.getUserData(function(response){
         if (response.status === 401){
           if ($location.path() !== '/'){
+            console.log("tying to redirect");
             $location.path('/');
           }
         }
