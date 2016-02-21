@@ -2,8 +2,13 @@
 
 
 angular.module('hackAppApp')
-  .controller('Register2Ctrl', function (uiGridConstants) {
+  .controller('Register2Ctrl', function (uiGridConstants, userService, $location) {
 
+    var scope = this;
+    userService.getUserDataWithGames(function(data) {
+      scope.userData = data;
+      console.log(data);
+    });
 
     var exampleGameData = [
       {
@@ -2804,6 +2809,36 @@ angular.module('hackAppApp')
       });
     };
 
+
+    this.finishRegistration = function() {
+      if(selectedGames.length===0) {
+        scope.noGamesSelected = true;
+        return;
+      }
+      scope.userData.ownedGames = [];
+      selectedGames.forEach(function(game) {
+        scope.userData.ownedGames.push({
+          appid: game.appid,
+          name: game.name,
+          img_icon_url:     game.img_icon_url,
+          img_logo_url:     game.img_logo_url,
+          playtime_forever:  game.playtime_forever,
+          advertise:        true
+        })
+      });
+
+      userService.setUserData(scope.userData);
+      userService.saveUserData(function(response) {
+        console.log(response);
+      });
+
+    };
+
+
+    this.goBack = function () {
+      userService.setUserData(scope.userData);
+      $location.path("/register");
+    }
 
 
 
