@@ -5,7 +5,6 @@ var express = require('express')
   , util = require('util')
   , session = require('express-session')
   , SteamStrategy = require('passport-steam').Strategy
-  , dbConfig = require('./db.js')
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(session)
   , User = require('./models/user.js');
@@ -13,12 +12,11 @@ var express = require('express')
 var steamAPIKey = process.env.STEAM_API_KEY;
 var hostname = process.env.STINDER_HOST || 'localhost';
 var port = process.env.STINDER_PORT || 9001;
-//var hicksSteamID = '76561197961296772';
+var db = process.env.STINDER_DB || 'mongodb://localhost/passport';
+var sessionSecret = process.env.EXPRESS_SECRET;
 
-// Mongoose setup
-mongoose.connect(dbConfig.url);
+mongoose.connect(db);
 
-// Passport session setup.
 passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
@@ -29,42 +27,38 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-var getUserGames = function(steamid, callback){
+var getUserGames = function (steamid, callback) {
   var requestOptions = {
     host: 'api.steampowered.com',
     port: 80,
-    path: '/IPlayerService/GetOwnedGames/v0001/?key='+ steamAPIKey +
-          '&steamid='+ steamid +
-          '&format=json' +
-          '&include_appinfo=1'
+    path: '/IPlayerService/GetOwnedGames/v0001/?key=' + steamAPIKey +
+    '&steamid=' + steamid +
+    '&format=json' +
+    '&include_appinfo=1'
   }
   console.log(requestOptions);
-  http.get(requestOptions, function(res){
-     var body = '';
-     res.on('data', function(chunk){
-       body += chunk;
-     });
+  http.get(requestOptions, function (res) {
+    var body = '';
+    res.on('data', function (chunk) {
+      body += chunk;
+    });
 
-     res.on('end', function(){
-       var ownedGames = JSON.parse(body).response.games;
-       ownedGames = ownedGames.map(function(game){
-         delete game.has_community_visible_stats;
-         return game;
-       });
-       callback(ownedGames);
-     });
-  }).on('error', function(e){
-     console.error("Error getting user's games");
+    res.on('end', function () {
+      var ownedGames = JSON.parse(body).response.games;
+      ownedGames = ownedGames.map(function (game) {
+        delete game.has_community_visible_stats;
+        return game;
+      });
+      callback(ownedGames);
+    });
+  }).on('error', function (e) {
+    console.error("Error getting user's games");
   })
-}
+};
 
-// Use the SteamStrategy within Passport.
-//   Strategies in passport require a `validate` function, which accept
-//   credentials (in this case, an OpenID identifier and profile), and invoke a
-//   callback with a user object.
 passport.use(new SteamStrategy({
-    returnURL: 'http://'+hostname+':'+port+'/auth/steam/return',
-    realm: 'http://'+hostname+':'+port+'/',
+    returnURL: 'http://' + hostname + ':' + port + '/auth/steam/return',
+    realm: 'http://' + hostname + ':' + port + '/',
     apiKey: steamAPIKey
   },
   function (identifier, profile, done) {
@@ -73,7 +67,7 @@ passport.use(new SteamStrategy({
       console.log("in next tick");
       profile = profile._json;
       console.log(profile);
-      getUserGames(profile.steamid, function(ownedGames){
+      getUserGames(profile.steamid, function (ownedGames) {
         User.findOneAndUpdate({'steamid': profile.steamid},
           {
             steamid: profile.steamid,
@@ -100,13 +94,8 @@ passport.use(new SteamStrategy({
   }
 ));
 
-
-var app = express();
-app.use(express.static(__dirname + '/../web/'));
-app.use(express.static(__dirname + '/../web/app'));
-
-app.use(session({
-  secret: process.env.EXPRESS_SECRET,
+var sessionConfig = {
+  secret: sessionSecret,
   name: 'sessionToken',
   resave: true,
   saveUninitialized: true,
@@ -115,95 +104,34 @@ app.use(session({
     maxAge: 60 * 20000,
     httpOnly: false
   },
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
-}));
+  store: new MongoStore({mongooseConnection: mongoose.connection})
+};
 
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
+var app = express();
+app.use(express.static(__dirname + '/../web/'));
+app.use(express.static(__dirname + '/../web/app'));
+app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit : "50mb" }));
+require('./routes/user.js')(app);
 
-// GET /auth/steam
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in Steam authentication will involve redirecting
-//   the user to steam.com.  After authenticating, Steam will redirect the
-//   user back to this application at /auth/steam/return
 app.get('/auth/steam',
   passport.authenticate('steam'),
   function (req, res) {
     // Will never reach here because of steam redirect
   });
 
-// GET /auth/steam/return
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
 app.get('/auth/steam/return',
   passport.authenticate('steam', {failureRedirect: '/'}),
   function (req, res) {
-    if (req.user.registrationComplete){
+    if (req.user.registrationComplete) {
       res.redirect('/#/home');
     }
-    else{
+    else {
       res.redirect('/#/register');
     }
   });
 
-app.get('/user', ensureAuthenticated, function(req, res){
-  if(req.user){
-    console.log("/user: returning user");
-    res.json(req.user);
-  }
-  else{
-    console.log("/user: returning null");
-    res.json({data: null});
-  }
-});
 
-app.post('/user', ensureAuthenticated, function(req, res) {
-  var authedUser = req.user;
-  var user = req.body.user;
-  if(user.steamid !== authedUser.steamid){
-    res.status(403).send("Cannot update for a user that isn't you");
-  }
-  else{
-    console.log(user);
-    user.registrationComplete = true;
-    User.findOneAndUpdate(
-      {steamid: authedUser.steamid} /*query:*/,
-      user /*doc*/,
-      {} /*options*/,
-      function (err, doc) { /*callback*/
-        if (err) {
-          res.status(500).send("Error updating user object");
-        }
-        else if (!doc) {
-          res.status(500).send("No user object found");
-        }
-        else {
-          res.status(200).send("User saved");
-        }
-      })
-  }
-});
-
-app.listen(9001);
-
-// Simple route middleware to ensure user is authenticated.
-//   Use this route middleware on any resource that needs to be protected.  If
-//   the request is authenticated (typically via a persistent login session),
-//   the request will proceed.  Otherwise, the user will be redirected to the
-//   login page.
-function ensureAuthenticated(req, res, next) {
-  console.log("checking authentication for " + req.path)
-  if (req.isAuthenticated()) {
-    console.log("user is authenticated");
-    return next();
-  }
-  else{
-    console.log("sending error message");
-    res.status(401).send("Authentication Failed");
-  }
-}
+app.listen(port);
