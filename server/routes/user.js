@@ -21,7 +21,7 @@ module.exports = function (app) {
       res.status(403).send("Cannot update for a user that isn't you");
     }
     else {
-      console.log(user);
+      //console.log(user);
       user.registrationComplete = true;
       User.findOneAndUpdate(
         { steamid: authedUser.steamid } /*query:*/,
