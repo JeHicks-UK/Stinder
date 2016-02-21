@@ -55,6 +55,7 @@ module.exports = function (app) {
         res.status(200).json({ message: "match" });
       } else {
         currentUser.accepted.push({_user: steamUser._id});
+        res.status(200).send();
       }
       currentUser.save();
     })
@@ -67,6 +68,7 @@ module.exports = function (app) {
     console.log('Rejecting ' + steamUserToCrush + ' from ' + currentUser);
     // Find full user object of person to be nuked from orbit emotionally
     currentUser.rejected.push({_user: steamUserToCrush._id});
+    res.status(200).send();
   });
 
 };
