@@ -6,20 +6,14 @@ module.exports = function (app) {
 
   app.get('/potential/next', ensureAuthenticated, function(req, res){
     // console.log(req.user.matches);
-    var matches = req.user.matches.map(function(match){
-      return match._user;
-    });
-    var accepts = req.user.accepted.map(function(accepted){
-      return accepted._user;
-    });
-    var rejects = req.user.rejected.map(function(rejected){
-      return rejeceted._user;
-    });/*
-    console.log(matches);
-    console.log(accepts);
-    console.log(rejects);*/
+    var pluckUserID = function(user){return user._user.toString()};
+    var matches = req.user.matches.map(pluckUserID);
+    var accepts = req.user.accepted.map(pluckUserID);
+    var rejects = req.user.rejected.map(pluckUserID);
+    var dontShowIDs = _.union(matches, accepts, rejects, [req.user._id]);
+    console.log("excluding following IDs: %S", dontShowIDs);
     User.find()
-      .nin('steamid', matches.concat(accepts).concat(rejects).concat([req.user.steamid]))
+      .nin('_id', dontShowIDs)
       .limit(1)
       .lean(true) //don't need mongoose wrapper functions
       .select('-matches -accepted -rejected -registrationComplete')
@@ -66,7 +60,7 @@ module.exports = function (app) {
     })
   });
 
-  app.post('potential/reject', ensureAuthenticated, function (req, res) {
+  app.post('/potential/reject', ensureAuthenticated, function (req, res) {
     // Lose hope all ye who enter here
     var steamUserToCrush = req.body._id;
     var currentUser = req.user;
