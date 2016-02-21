@@ -2797,6 +2797,7 @@ angular.module('hackAppApp')
 
       gridApi.selection.on.rowSelectionChanged(null,function(row){
         if(row.isSelected) {
+          scope.noGamesSelected = false;
           selectedGames.push(row.entity);
         }
         else {
@@ -2829,7 +2830,13 @@ angular.module('hackAppApp')
 
       userService.setUserData(scope.userData);
       userService.saveUserData(function(response) {
-        console.log(response);
+        if(response.status===200) {
+          $location.path("/home");
+        }
+        else {
+          scope.errorCreatingAccount = true;
+          console.log(response);
+        }
       });
 
     };
