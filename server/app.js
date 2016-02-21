@@ -115,6 +115,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json({ limit : "50mb" }));
 require('./routes/user.js')(app);
+require('./routes/matches.js')(app);
+require('./helpers/debug.js')(app);
 
 app.get('/auth/steam',
   passport.authenticate('steam'),
