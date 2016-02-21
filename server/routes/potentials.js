@@ -11,7 +11,7 @@ module.exports = function (app) {
     var accepts = req.user.accepted.map(pluckUserID);
     var rejects = req.user.rejected.map(pluckUserID);
     var dontShowIDs = _.union(matches, accepts, rejects, [req.user._id]);
-    console.log("excluding following IDs: %S", dontShowIDs);
+    console.log("excluding following IDs: %s", dontShowIDs);
     User.find()
       .nin('_id', dontShowIDs)
       .limit(1)
@@ -64,9 +64,10 @@ module.exports = function (app) {
     // Lose hope all ye who enter here
     var steamUserToCrush = req.body._id;
     var currentUser = req.user;
-    console.log('Rejecting ' + steamUserToCrush + ' from ' + currentUser);
+    console.log('Rejecting %s from %s', steamUserToCrush, currentUser.personaname);
     // Find full user object of person to be nuked from orbit emotionally
     currentUser.rejected.push({_user: steamUserToCrush._id});
+    currentUser.save();
     res.status(200).send();
   });
 
