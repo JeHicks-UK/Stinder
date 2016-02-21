@@ -15,12 +15,13 @@ angular.module('hackAppApp')
       enableFullRowSelection: false,
       enableRowSelection: false,
       multiSelect: false,
-      enableHorizontalScrollbar: false
+      enableHorizontalScrollbar: false,
+      onRegisterApi: function(gridApi){
+        scope.gridApi = gridApi;
+      }
     };
 
-    scope.gameGridOptions.onRegisterApi = function(gridApi){
-      scope.gridApi = gridApi;
-    };
+
 
 
 
@@ -31,7 +32,7 @@ angular.module('hackAppApp')
 
         console.log(data);
         scope.userData = data;
-        if(scope.userData) {
+        if(scope.userData && scope.userData.steamid) {
           updateGameGrid();
         }
         else {
@@ -56,10 +57,10 @@ angular.module('hackAppApp')
       });
 
 
-      scope.gameGridOptions = {
-        minRowsToShow: scope.userData.ownedGames.length>4 ? 4 : scope.userData.ownedGames.length,
-        enableVerticalScrollbar: scope.userData.ownedGames.length>4 ? uiGridConstants.scrollbars.ALWAYS : uiGridConstants.scrollbars.NEVER,
-        columnDefs: [
+      scope.gameGridOptions.minRowsToShow = scope.userData.ownedGames.length>4 ? 4 : scope.userData.ownedGames.length;
+
+      scope.gameGridOptions.enableVerticalScrollbar = scope.userData.ownedGames.length>4 ? uiGridConstants.scrollbars.ALWAYS : uiGridConstants.scrollbars.NEVER;
+      scope.gameGridOptions.columnDefs = [
           { field: 'image', cellTemplate: "<img src=\"{{row.entity.imageUrl}}\" lazy-src>", maxWidth: 184, enableSorting: false},
           { field: 'name' },
           { field: 'playtime_forever',
@@ -72,14 +73,14 @@ angular.module('hackAppApp')
             cellTemplate: "<span class='playtime-cell-content'>{{row.entity.playtime_forever/60 | number : 0}} h</span>"
           }
 
-        ],
-        data: scope.userData.ownedGames
-      };
-      scope.gridApi.core.refresh();
+        ];
+
+      scope.gameGridOptions.data = scope.userData.ownedGames;
+
+      if(scope.gridApi) {
+        scope.gridApi.core.refresh();
+      }
       scope.potentialReady = true;
-
-
-
     };
 
 
@@ -97,7 +98,7 @@ angular.module('hackAppApp')
     this.reject = function(user) {
       matchService.rejectMatch(user._id, function(response) {
         console.log(response);
-        if (response.data.status === 200) {
+        if (response.status === 200) {
           getPotentialMatch();
         }
         else {
