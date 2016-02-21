@@ -105,8 +105,10 @@ body {
 }
 
 .reg-form-steam-id {
-  line-height: 31px;
   font-style: italic;
+  position: relative;
+  top: -12px;
+  left: 12px;
 }
 
 .dropdown-menu.dropdown-menu-form {
@@ -150,4 +152,8 @@ body {
 
 .ui-grid-row.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
   background-color: #DF691A;
+}
+
+.reg-avatar {
+  height: 60px;
 }
