@@ -4,20 +4,31 @@
     <h1>Play with this person?</h1>
     <div class="well bs-component">
 
-      <div class="home-avatar-container">
-        <img class="home-avatar" src="{{::home.userData.avatarfull}}">
+      <div ng-if="!home.noMorePotential && home.potentialReady" class="potential-match">
+        <div class="home-avatar-container">
+          <img class="home-avatar" src="{{::home.userData.avatarfull}}">
+        </div>
+        <div class="home-user-details">
+          <div class="home-display-name">{{::home.userData.displayName}}</div>
+          <div class="home-languages"><span ng-repeat="lan in home.userData.languages">{{lan}} <span ng-if="!$last">, </span></span> </div>
+          <div class="home-about">{{::home.userData.aboutMe}}</div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="home-grid-message">{{::home.userData.displayName}} is interested in these games</div>
+        <div ui-grid="home.gameGridOptions" my-ui-grid-resize class="home-game-grid"></div>
+        <hr>
+        <button class="btn btn-lg btn-danger" ng-click="home.reject(home.userData)"><i class="fa fa-times"></i> Nope</button>
+        <button class="btn btn-lg btn-success btn-try-match" ng-click="home.accept(home.userData)"><i class="fa fa-gamepad"></i> Yep</button>
       </div>
-      <div class="home-user-details">
-        <div class="home-display-name">{{::home.userData.displayName}}</div>
-        <div class="home-languages"><span ng-repeat="lan in home.userData.languages">{{lan}} <span ng-if="!$last">, </span></span> </div>
-        <div class="home-about">{{::home.userData.aboutMe}}</div>
+
+
+      <div ng-if="home.noMorePotential" class="alert alert-dismissible alert-info alert-no-gamers">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        It looks we don't have any more gamers. Please check out this space a bit later.
       </div>
-      <div class="clearfix"></div>
-      <div class="home-grid-message">{{::home.userData.displayName}} is interested in these games</div>
-      <div ui-grid="home.gameGridOptions" my-ui-grid-resize class="home-game-grid"></div>
-      <hr>
-      <button class="btn btn-lg btn-danger" ng-click="home.reject(home.userData)"><i class="fa fa-times"></i> Nope</button>
-      <button class="btn btn-lg btn-success btn-try-match" ng-click="home.accept(home.userData)"><i class="fa fa-gamepad"></i> Yep</button>
+
+
+
     </div>
   </div>
 </div>

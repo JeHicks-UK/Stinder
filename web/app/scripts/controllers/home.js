@@ -5,6 +5,7 @@ angular.module('hackAppApp')
   .controller('HomeCtrl', function (matchService, uiGridConstants) {
 
     var scope = this;
+    scope.potentialReady = false;
 
     scope.gameGridOptions = {
       enableColumnMenus: false,
@@ -24,13 +25,18 @@ angular.module('hackAppApp')
 
 
     var getPotentialMatch = function() {
+      scope.potentialReady = false;
       console.log("Getting next guy");
       matchService.getPotentialMatch(function(data) {
 
         console.log(data);
         scope.userData = data;
-
-        updateGameGrid();
+        if(scope.userData) {
+          updateGameGrid();
+        }
+        else {
+          scope.noMorePotential = true;
+        }
 
       });
     };
@@ -70,7 +76,7 @@ angular.module('hackAppApp')
         data: scope.userData.ownedGames
       };
       scope.gridApi.core.refresh();
-
+      scope.potentialReady = true;
 
 
 
