@@ -5,31 +5,8 @@ angular.module('hackAppApp')
   .controller('AccountSetupCtrl', function (userService, $location) {
 
     var scope = this;
-    userService.getUserData(function(data) {
-      console.log(data);
-      scope.userData = data;
-      scope.userData.dob = new Date(data.dob);
-    });
 
-
-    this.goToNextRegPage = function() {
-      scope.userData.languages = [];
-      scope.selectedLanguages.forEach(function(lan) {
-        scope.userData.languages.push(lan.label);
-      });
-      if(!scope.userData.displayName || scope.userData.displayName.length<4) {
-        scope.missingDisplayName = true;
-      }
-      else {
-        userService.setUserData(scope.userData);
-        $location.path("/accountsetup2");
-      }
-
-    };
-
-
-    this.selectedLanguages = [{"code":"en","label":"English","nativeName":"English"}];
-    this.languageDropdownSettings = {
+    scope.languageDropdownSettings = {
       idProp: 'code',
       externalIdProp: '',
       scrollableHeight: '300px',
@@ -38,10 +15,11 @@ angular.module('hackAppApp')
       showCheckAll: false,
       smartButtonMaxItems: 4,
       buttonClasses: "btn btn-info",
-      smartButtonTextConverter: function(itemText) {
+      smartButtonTextConverter: function (itemText) {
         return itemText;
       }
     };
+
     this.languages = [
       {"code":"ab","label":"Abkhaz","nativeName":"аҧсуа"},
       {"code":"aa","label":"Afar","nativeName":"Afaraf"},
@@ -226,6 +204,38 @@ angular.module('hackAppApp')
       {"code":"za","label":"Zhuang, Chuang","nativeName":"Saɯ cueŋƅ, Saw cuengh"}
     ];
 
+    userService.getUserData(function(data) {
+      console.log(data);
+      scope.userData = data;
+      scope.userData.dob = new Date(data.dob);
 
+      //set languages
+      scope.selectedLanguages = [];
+      if (scope.userData.languages && scope.userData.languages.length){
+        scope.userData.languages.forEach(function(userLanguage){
+          scope.selectedLanguages.push(
+            _.find(scope.languages, function(languageInfo){
+              return userLanguage === languageInfo.label;
+            })
+          );
+        });
+      }
+      else{
+        scope.selectedLanguages.push({"code":"en","label":"English","nativeName":"English"});
+      }
+    });
 
+    this.goToNextRegPage = function() {
+      scope.userData.languages = [];
+      scope.selectedLanguages.forEach(function(lan) {
+        scope.userData.languages.push(lan.label);
+      });
+      if(!scope.userData.displayName || scope.userData.displayName.length<4) {
+        scope.missingDisplayName = true;
+      }
+      else {
+        userService.setUserData(scope.userData);
+        $location.path("/accountsetup2");
+      }
+    };
   });
