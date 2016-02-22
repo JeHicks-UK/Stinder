@@ -2,7 +2,7 @@
 
 
 angular.module('hackAppApp')
-  .controller('AccountSetup2Ctrl', function (uiGridConstants, userService, $location) {
+  .controller('AccountSetup2Ctrl', function (uiGridConstants, userService, $location, $timeout) {
 
     var scope = this;
     userService.getUserData(function(data) {
@@ -41,13 +41,25 @@ angular.module('hackAppApp')
 
       scope.gameGridOptions.onRegisterApi = function( gridApi ) {
 
-        gridApi.selection.on.rowSelectionChanged(null,function(row){
-          var index = scope.userData.ownedGames.indexOf(row.entity);
-          scope.userData.ownedGames[index].advertise = row.isSelected;
-          if(row.isSelected) {
-            scope.noGamesSelected = false;
+        $timeout(function() {
+
+          for(var i=0; i<scope.userData.ownedGames.length; i++) {
+            if(scope.userData.ownedGames[i].advertise) {
+              gridApi.selection.selectRow(gridApi.grid.rows[i].entity);
+            }
           }
+
+          gridApi.selection.on.rowSelectionChanged(null,function(row){
+            var index = scope.userData.ownedGames.indexOf(row.entity);
+            scope.userData.ownedGames[index].advertise = row.isSelected;
+            if(row.isSelected) {
+              scope.noGamesSelected = false;
+            }
+          });
+
         });
+
+
       };
 
 
