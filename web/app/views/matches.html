@@ -21,7 +21,7 @@
   <div ng-if="matches.matches && matches.matches.length!==0" class="matches-fluid-container">
 
     <div class="well bs-component">
-      <a class="steam-account-link" href=""><i class="fa fa-steam-square"></i> Steam Account</a>
+      <a class="steam-account-link" target="_blank" href="{{matches.matchDetails.profileurl}}"><i class="fa fa-steam-square"></i> Steam Account</a>
       <div class="home-avatar-container">
         <img class="home-avatar" src="{{matches.matchDetails.avatarfull}}">
       </div>
