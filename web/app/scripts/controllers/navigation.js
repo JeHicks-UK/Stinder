@@ -9,8 +9,8 @@ angular.module('hackAppApp')
     $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
       $scope.activePage = $location.path();
       userService.isRegistrationComplete(function(isRegistrationComplete){
-        if(!isRegistrationComplete){
-          $location.path('/#/accountsetup');
+        if(!isRegistrationComplete && $location.path() !== '/accountsetup2'){
+          $location.path('/accountsetup');
         }
       })
     });

@@ -48,6 +48,11 @@ angular.module('hackAppApp')
     };
 
     this.saveUserData = function (callback){
-      server.saveUserData(userData, callback);
+      server.saveUserData(userData, function(response){
+        if(response.status === 200){
+          userData.registrationComplete = true;
+        }
+        callback(response);
+      });
     };
   });
