@@ -2,7 +2,7 @@
 
 
 angular.module('hackAppApp')
-  .controller('Register2Ctrl', function (uiGridConstants, userService, $location) {
+  .controller('AccountSetup2Ctrl', function (uiGridConstants, userService, $location) {
 
     var scope = this;
     userService.getUserData(function(data) {
@@ -81,7 +81,7 @@ angular.module('hackAppApp')
 
     this.goBack = function () {
       userService.setUserData(scope.userData);
-      $location.path("/register");
+      $location.path("/accountsetup");
     }
 
 

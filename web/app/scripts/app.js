@@ -32,15 +32,15 @@ angular
         controller: 'HomeCtrl',
         controllerAs: 'home'
       })
-      .when('/register', {
-        templateUrl: 'views/register.html',
-        controller: 'RegisterCtrl',
-        controllerAs: 'register'
+      .when('/accountsetup', {
+        templateUrl: 'views/accountsetup.html',
+        controller: 'AccountSetupCtrl',
+        controllerAs: 'accountsetup'
       })
-      .when('/register2', {
-        templateUrl: 'views/register2.html',
-        controller: 'Register2Ctrl',
-        controllerAs: 'register2'
+      .when('/accountsetup2', {
+        templateUrl: 'views/accountsetup2.html',
+        controller: 'AccountSetup2Ctrl',
+        controllerAs: 'accountsetup2'
       })
       .when('/matches', {
         templateUrl: 'views/matches.html',
@@ -67,7 +67,7 @@ angular
               $location.path('/home');
             }
             else {
-              $location.path('/register');
+              $location.path('/accountsetup');
             }
           }
         }

@@ -2,7 +2,7 @@
 
 
 angular.module('hackAppApp')
-  .controller('RegisterCtrl', function (userService, $location) {
+  .controller('AccountSetupCtrl', function (userService, $location) {
 
     var scope = this;
     userService.getUserData(function(data) {
@@ -22,7 +22,7 @@ angular.module('hackAppApp')
       }
       else {
         userService.setUserData(scope.userData);
-        $location.path("/register2");
+        $location.path("/accountsetup2");
       }
 
     };

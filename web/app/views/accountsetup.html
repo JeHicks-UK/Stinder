@@ -12,21 +12,21 @@
           <div class="form-group">
             <label for="steamId" class="col-lg-2 control-label">Steam Persona</label>
             <div class="col-lg-10">
-              <img class="reg-avatar" ng-src="{{::register.userData.avatarfull}}">
-              <span id="steamId" class="reg-form-steam-id">{{::register.userData.personaname}}</span>
+              <img class="reg-avatar" ng-src="{{::accountsetup.userData.avatarfull}}">
+              <span id="steamId" class="reg-form-steam-id">{{::accountsetup.userData.personaname}}</span>
             </div>
           </div>
-          <div class="form-group" ng-class="register.missingDisplayName ? 'has-error': ''">
+          <div class="form-group" ng-class="accountsetup.missingDisplayName ? 'has-error': ''">
             <label for="inputDisplayName" class="col-lg-2 control-label">Display Name</label>
             <div class="col-lg-10">
-              <input type="text" ng-model="register.userData.displayName" class="form-control" id="inputDisplayName" placeholder="Name others see on Stinder">
-              <span ng-if="register.missingDisplayName" class="help-block">Display Name is compulsory and has to be at least 4 characters long</span>
+              <input type="text" ng-model="accountsetup.userData.displayName" class="form-control" id="inputDisplayName" placeholder="Name others see on Stinder">
+              <span ng-if="accountsetup.missingDisplayName" class="help-block">Display Name is compulsory and has to be at least 4 characters long</span>
             </div>
           </div>
           <div class="form-group">
             <label for="inputBirth" class="col-lg-2 control-label">Date of Birth</label>
             <div class="col-lg-10">
-              <input type="date" ng-model="register.userData.dob" class="form-control" id="inputBirth" placeholder="Date of Birth">
+              <input type="date" ng-model="accountsetup.userData.dob" class="form-control" id="inputBirth" placeholder="Date of Birth">
             </div>
           </div>
           <div class="form-group">
@@ -34,9 +34,9 @@
             <div class="col-lg-10">
               <div id="inputLanguages"
                    ng-dropdown-multiselect=""
-                   options="register.languages"
-                   selected-model="register.selectedLanguages"
-                   extra-settings="register.languageDropdownSettings"></div>
+                   options="accountsetup.languages"
+                   selected-model="accountsetup.selectedLanguages"
+                   extra-settings="accountsetup.languageDropdownSettings"></div>
               <span class="help-block">What languages matches should speak?</span>
             </div>
 
@@ -44,14 +44,14 @@
           <div class="form-group">
             <label for="inputAboutMe" class="col-lg-2 control-label">About Me</label>
             <div class="col-lg-10">
-              <textarea class="form-control" ng-model="register.userData.aboutMe" rows="3" id="inputAboutMe"></textarea>
+              <textarea class="form-control" ng-model="accountsetup.userData.aboutMe" rows="3" id="inputAboutMe"></textarea>
               <span class="help-block">Talk what you like and why should somebody want to play a game with you.</span>
             </div>
           </div>
 
           <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-              <button type="submit" class="btn btn-primary" ng-click="register.goToNextRegPage()">Next</button>
+              <button type="submit" class="btn btn-primary" ng-click="accountsetup.goToNextRegPage()">Next</button>
             </div>
           </div>
         </fieldset>

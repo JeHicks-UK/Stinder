@@ -25,6 +25,12 @@ angular.module('hackAppApp')
       }
     };
 
+    this.isRegistrationComplete = function(callback){
+      this.getUserData(function(userdata){
+        callback(userdata.registrationComplete);
+      })
+    };
+
     this.getUserDataWithGames = function(callback){
       if (userData && userData.ownedGames) {
         callback(userData);

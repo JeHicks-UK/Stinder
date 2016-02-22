@@ -5,12 +5,14 @@
 
 
 angular.module('hackAppApp')
-  .controller('NavigationCtrl', function ($location, $scope, $rootScope) {
-
-
+  .controller('NavigationCtrl', function ($location, $scope, $rootScope, userService) {
     $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
       $scope.activePage = $location.path();
-
+      userService.isRegistrationComplete(function(isRegistrationComplete){
+        if(!isRegistrationComplete){
+          $location.path('/#/accountsetup');
+        }
+      })
     });
 
     $scope.activePage = $location.path();
