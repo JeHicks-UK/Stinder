@@ -11,8 +11,7 @@ var express = require('express')
   , _ = require('underscore');
 
 var steamAPIKey = process.env.STEAM_API_KEY;
-var hostname = process.env.STINDER_HOST || 'localhost';
-var port = process.env.STINDER_PORT || 9001;
+var hostname = process.env.STINDER_HOST_WITH_PORT || 'localhost:9001';
 var db = process.env.STINDER_DB || 'mongodb://localhost/passport';
 var sessionSecret = process.env.EXPRESS_SECRET;
 
@@ -68,8 +67,8 @@ var mergeGamesArrays = function(existingGames, gamesFromSteam){
 }
 
 passport.use(new SteamStrategy({
-    returnURL: 'http://' + hostname + ':' + port + '/auth/steam/return',
-    realm: 'http://' + hostname + ':' + port + '/',
+    returnURL: 'http://' + hostname + '/auth/steam/return',
+    realm: 'http://' + hostname,
     apiKey: steamAPIKey
   },
   function (identifier, profile, done) {
