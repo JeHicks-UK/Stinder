@@ -89,6 +89,7 @@ passport.use(new SteamStrategy({
               user.steamid = profile.steamid;
               user.personaname = profile.personaname;
               user.avatarfull = profile.avatarfull;
+              user.profileurl = profile.profileurl;
               user.ownedGames = mergeGamesArrays(user.ownedGames, newGamesList);
             }
             else {
@@ -97,6 +98,7 @@ passport.use(new SteamStrategy({
                 steamid : profile.steamid,
                 personaname : profile.personaname,
                 avatarfull : profile.avatarfull,
+                profileurl : profile.profileurl,
                 ownedGames : newGamesList
               });
             }

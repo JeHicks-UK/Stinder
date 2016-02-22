@@ -14,6 +14,7 @@ var UserSchema = new mongoose.Schema({
   steamid:      String, //from steam
   personaname:  String, //from steam
   avatarfull:   String, //from steam
+  profileurl:   String, //from steam
   displayName:  String,
   dob:          Date,
   languages:    [String],
