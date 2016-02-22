@@ -59,7 +59,6 @@ var getUserGames = function (steamid, callback) {
 var mergeGamesArrays = function(existingGames, gamesFromSteam){
   var mergedGames = existingGames;
   var existingGameIDs = _.pluck(existingGames, 'appid');
-  console.log(existingGameIDs);
   gamesFromSteam.forEach(function(game){
     if (!_.contains(existingGameIDs, game.appid.toString())){
       mergedGames.push(game);
