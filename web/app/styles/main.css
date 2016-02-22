@@ -230,7 +230,10 @@ body {
   margin-bottom: 5px;
 }
 
-.home-game-grid {
+.matches-game-grid {
+  width: 600px;
+  margin-top: 19px;
+  margin-bottom: 19px;
 }
 
 .playtime-cell-content {
@@ -275,4 +278,12 @@ body {
 
 .alert-no-gamers {
   margin-top: 19px;
+}
+
+.list-group-item.matches.active {
+  background-color: #485563;;
+}
+
+.steam-account-link {
+  float: right;
 }

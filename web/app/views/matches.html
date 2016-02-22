@@ -2,36 +2,36 @@
   <div class="matches-fixed-container">
 
     <div class="list-group">
-      <a href="#" class="list-group-item active">
+      <a class="list-group-item active">
         Your Matches
       </a>
-      <a href="#" class="list-group-item">
-        <img class="match-avatar" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ab/ab911634dab3307b9910dc8bceafcc659eb0ebd5_full.jpg">
-        <span class="match-name">SuperUser</span>
+      <a ng-repeat="match in matches.matches" href="" ng-click="matches.showMatchDetails($index)" ng-class="match.selected ? 'active' : ''" class="list-group-item matches">
+        <img class="match-avatar" src="{{::match._user.avatarfull}}">
+        <span class="match-name">{{::match._user.displayName}}</span>
         <div class="clearfix"></div>
       </a>
-      <a href="#" class="list-group-item">
-        <img class="match-avatar" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/13/13a47d85509af81a54b4dc11298f5b35e1681b07_full.jpg">
-        <span class="match-name">VexX0r</span>
+      <a ng-if="!matches.matches || matches.matches.length===0" class="list-group-item matches">
+        <span class="">Sorry, you don't have any matches yet. :(</span>
         <div class="clearfix"></div>
       </a>
+
     </div>
 
   </div>
-  <div class="matches-fluid-container">
+  <div ng-if="matches.matches && matches.matches.length!==0" class="matches-fluid-container">
 
     <div class="well bs-component">
-
+      <a class="steam-account-link" href=""><i class="fa fa-steam-square"></i> Steam Account</a>
       <div class="home-avatar-container">
-        <img class="home-avatar" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ab/ab911634dab3307b9910dc8bceafcc659eb0ebd5_full.jpg">
+        <img class="home-avatar" src="{{matches.matchDetails.avatarfull}}">
       </div>
       <div class="home-user-details">
-        <div class="home-display-name">GamerXXX_78</div>
-        <div class="home-languages">English, German</div>
-        <div class="home-about">I usually like playing games at night</div>
+        <div class="home-display-name">{{matches.matchDetails.displayName}}</div>
+        <div class="home-languages"><span ng-repeat="lan in matches.matchDetails.languages">{{lan}} <span ng-if="!$last">, </span></span></div>
+        <div class="home-about">{{matches.matchDetails.aboutMe}}</div>
       </div>
       <div class="clearfix"></div>
-      <div ui-grid="matches.gameGridOptions" class="home-game-grid"></div>
+      <div ui-grid="matches.gameGridOptions" my-ui-grid-resize class="matches-game-grid"></div>
     </div>
 
 
